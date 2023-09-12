@@ -1,18 +1,8 @@
 import './bootstrap';
 
-import Alpine from 'alpinejs';
-import {
-    Datepicker,
-    Input,
-    initTE
-} from "tw-elements";
+// Already available through breeze.
+// import Alpine from 'alpinejs';
 
-window.Alpine = Alpine;
+// window.Alpine = Alpine;
 
-Alpine.start();
-
-// Tailwind elements
-initTE({
-    Datepicker,
-    Input
-});
+// Alpine.start();

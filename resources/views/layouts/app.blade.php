@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ $title ?? config('app.name', 'La Bottega') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -14,15 +14,16 @@
         href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap"
         rel="stylesheet" />
 
-    <link
-        href="https://fonts.bunny.net/css?family=Roboto:300,400,500,700,900&display=swap"
-        rel="stylesheet" />
-
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <link href="{{ asset('vendor/bladewind/css/animate.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('vendor/bladewind/css/bladewind-ui.min.css') }}" rel="stylesheet" />
+    <script src="{{ asset('vendor/bladewind/js/helpers.js') }}"></script>
 </head>
 
 <body class="font-sans antialiased">
+    <x-notification position="top right" />
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         @include('layouts.navigation')
 
@@ -40,6 +41,11 @@
             {{ $slot }}
         </main>
     </div>
+    @if (session('message') && session('title') && session('status'))
+        <script>
+            showNotification("{{session('title')}}", "{{session('message')}}", "{{session('status')}}", 3);
+        </script>
+    @endif
 </body>
 
 </html>

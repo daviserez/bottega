@@ -32,3 +32,9 @@ vendor/bin/sail npm run dev
 # ./vendor/bin/duster lint
 # OR
 # ./vendor/bin/duster fix
+
+#composer require livewire/livewire
+
+# vérifier que les assets de bladewindui sont bien regeneré (https://bladewindui.com/#update)
+
+
