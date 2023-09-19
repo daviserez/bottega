@@ -16,17 +16,35 @@ class Edit extends Component
     #[Rule('required|min:3')]
     public $name;
 
-    #[Rule('min:3')]
     public $firstname;
+
+    public $phone;
+
+    public $street;
+
+    public $postcode;
+
+    public $city;
+
+    public $country;
+
+    // TODO validation email
+    public $email;
 
     public function update() {
         $this->validate();
 
-
+        // TODO city automatically filled by postcode
         $customer = Customer::find($this->id);
         $customer->update([
             'name' => $this->name,
             'firstname' => $this->firstname,
+            'phone' => $this->phone,
+            'street' => $this->street,
+            'postcode' => $this->postcode,
+            'city' => $this->city,
+            'country' => $this->country,
+            'email' => $this->email,
         ]);
 
         session()->flash('message', 'The customer has been updated with success.');

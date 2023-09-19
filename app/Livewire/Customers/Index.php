@@ -3,7 +3,6 @@
 namespace App\Livewire\Customers;
 
 use App\Models\Customer;
-use Illuminate\Http\Request;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -13,6 +12,8 @@ class Index extends Component
 
     // public $customers;
     public $searchTerms = '';
+
+    public $displayArchived = false;
 
     public function mount()
     {
@@ -24,9 +25,9 @@ class Index extends Component
         // $searchTerms = $request->input('search');
         // TODO validate searchtermes?
 
-        if (empty($this->searchTerms)) {
-            $customers = Customer::query();
-        } else {
+        $customers = Customer::query();
+
+        if (!empty($this->searchTerms)) {
             // TODO REVOIR CETTE RECHERCHE DE MERDE
             $phoneNumber = '';
             $nonPhoneNumber = '';
@@ -40,7 +41,7 @@ class Index extends Component
             // Extract non-digits and non-spaces for the non-phone number part
             $nonPhoneNumber = trim(preg_replace('/[\s+]+/', ' ', $this->searchTerms));
 
-            $customers = Customer::where(function ($query) use ($phoneNumber, $nonPhoneNumber) {
+            $customers = $customers->where(function ($query) use ($phoneNumber, $nonPhoneNumber) {
                 if (!empty($phoneNumber)) {
                     // Handle phone number separately
                     $query->where('phone', 'like', "%$phoneNumber%");
@@ -60,6 +61,10 @@ class Index extends Component
             });
         }
 
+        if ($this->displayArchived) {
+            $customers = $customers->onlyTrashed();
+        }
+
         $customers = $customers
             ->orderBy('firstname')
             ->orderBy('name')
@@ -71,9 +76,32 @@ class Index extends Component
         );
     }
 
+    public function restore($id)
+    {
+        // TODO validate input
+        $customer = Customer::withTrashed()->find($id);
+        $customer->restore();
+
+        $this->js(
+            <<<'JS'
+                showNotification(
+                    "Customer restored",
+                    "The customer has been restored with success.",
+                    "success",
+                    3,
+                );
+            JS
+        );
+    }
+
+    public function toggleArchive()
+    {
+        $this->displayArchived = !$this->displayArchived;
+        $this->resetPage();
+    }
+
     public function search()
     {
-        // Reset pagination.
         $this->resetPage();
     }
 }

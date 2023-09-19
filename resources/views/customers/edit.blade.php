@@ -9,11 +9,17 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <livewire:customers.edit
                 :id="$customer->id"
                 :name="$customer->name"
                 :firstname="$customer->firstname"
+                :phone="$customer->phone"
+                :street="$customer->street"
+                :postcode="$customer->postcode"
+                :city="$customer->city"
+                :country="$customer->country"
+                :email="$customer->email"
             />
         </div>
     </div>
